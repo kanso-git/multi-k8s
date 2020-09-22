@@ -3,6 +3,11 @@ language: generic
 services:
   - docker
 
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
 # in case we need to test more than projects, all we need to do is to list them
 # NB the custom Dockerfile.dev doesn't remove the necessity to add the build context
 before_install:
@@ -21,15 +26,8 @@ before_install:
 script:
   - docker run -e CI=true  kansodocker/client npm run test
 
-# building images after a success test
-after_sucess:
-  - docker build -t kansodocker/multi-client ./client
-  - docker build -t kansodocker/multi-nginx ./nginx
-  - docker build -t kansodocker/multi-server ./server
-  - docker build -t kansodocker/multi-worker ./worker
-
-  # Take those images and push them to docker hub
-  - docker push kansodocker/multi-client
-  - docker push kansodocker/multi-nginx
-  - docker push kansodocker/multi-server
-  - docker push kansodocker/multi-worker
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
