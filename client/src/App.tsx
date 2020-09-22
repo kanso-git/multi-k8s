@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title"> Fib Calculator app </h1>
+          <h1 className="App-title"> Fib Calculator app working with K8S </h1>
           <p>
             <Link to="/"> Home </Link>
             <Link to="/otherpage"> Other page </Link>{' '}
